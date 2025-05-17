@@ -13,7 +13,6 @@ System_Boundary(cinemaAbyss, "Cinema Abyss"){
     Container(movieService, "Сервис медиатеки", "Go")
     ContainerDb(customerDB, "База данных", "PostgreSQL", "Пользователи")
     ContainerDb(movieDB, "База данных", "PostgreSQL", "Медиатека, метаданные, S3 связи")
-    Container(cdn, "CDN")
     Container(kafka, "Kafka queue")
     Container(paymentService, "Платёжная система", "Go")
 }
@@ -22,6 +21,7 @@ System_Ext(recomendations, "Сервис рекомендаций")
 System_Ext(s3, "Хранилище фильмотеки", "S3")
 System_Ext(thirdPartyMovieSource, "Сторонняя медиатека")
 System_Ext(paymentSystem, "Платёжная система")
+System_Ext(cdn, "CDN")
 
 ' внешние сущности
 ' потоки
@@ -47,5 +47,7 @@ Rel(kafka, recomendations, "data")
 Rel(kafka, thirdPartyMovieSource, "request")
 
 Rel(paymentSystem, apiGateway, "success/fail")
+
+Rel(cdn, s3, "request")
 
 @enduml
