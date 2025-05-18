@@ -22,27 +22,13 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: movies-service
-                port:
-                  number: 8081
-          - path: /api/proxy
-            pathType: Prefix
-            backend:
-              service:
                 name: proxy-service
                 port:
                   number: 8081
-          - path: /api
-            pathType: Prefix
-            backend:
-              service:
-                name: monolith
-                port:
-                  number: 8080
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: health
+                name: monolith
                 port:
                   number: 8080                              

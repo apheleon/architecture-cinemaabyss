@@ -18,6 +18,9 @@ func main() {
 	if port == "" {
 		port = "8081"
 	}
+
+	log.Printf("cfg %+v", cfg)
+
 	log.Printf("Starting proxy microservice on port %s", port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
