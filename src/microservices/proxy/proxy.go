@@ -58,6 +58,7 @@ func (b BaseProxy) proxy(w http.ResponseWriter, r *http.Request) {
 	}
 
 	log.Printf("%s - %s - %s - %d - %dKB\n", r.Proto, r.Method, proxyUrl.String(), resp.StatusCode, written/1000)
+	w.WriteHeader(resp.StatusCode)
 }
 
 func (b StranglerFigProxy) proxy(w http.ResponseWriter, r *http.Request) {
