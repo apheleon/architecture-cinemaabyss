@@ -12,7 +12,7 @@ func main() {
 	proxy := newProxy(cfg)
 
 	http.HandleFunc("/api/movies", proxy.proxy)
-	http.HandleFunc("/api/proxy/health", handleHealth)
+	http.HandleFunc("/health", handleHealth)
 
 	port := cfg.PORT
 	if port == "" {
