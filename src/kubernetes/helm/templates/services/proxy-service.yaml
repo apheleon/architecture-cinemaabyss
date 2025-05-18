@@ -32,8 +32,6 @@ spec:
         env:
         - name: PORT
           value: "{{ .Values.proxyService.service.targetPort }}"
-        - name: DB_CONNECTION_STRING
-          value: "postgres://$(DB_USER):$(DB_PASSWORD)@$(DB_HOST):$(DB_PORT)/$(DB_NAME)?sslmode=disable"
         envFrom:
         - configMapRef:
             name: cinemaabyss-config
@@ -43,13 +41,13 @@ spec:
           {{- toYaml .Values.proxyService.resources | nindent 10 }}
         readinessProbe:
           httpGet:
-            path: /api/proxy/health
+            path: /health
             port: {{ .Values.proxyService.service.targetPort }}
           initialDelaySeconds: 5
           periodSeconds: 10
         livenessProbe:
           httpGet:
-            path: /api/proxy/health
+            path: /health
             port: {{ .Values.proxyService.service.targetPort }}
           initialDelaySeconds: 15
           periodSeconds: 20
