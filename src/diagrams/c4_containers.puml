@@ -1,0 +1,53 @@
+@startuml cinema
+!includeurl https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/refs/heads/master/C4_Container.puml
+
+
+Person(customer, "Клиент", "Пользователь сервиса")
+Person(admin, "Администратор", "Управляет контентом, пользователями и тд...")
+
+
+Container(apiGateway, "API Gateway", "Go")
+
+System_Boundary(cinemaAbyss, "Cinema Abyss"){
+    Container(customerProfileService, "Профиль пользователя", "Go")
+    Container(movieService, "Сервис медиатеки", "Go")
+    ContainerDb(customerDB, "База данных", "PostgreSQL", "Пользователи")
+    ContainerDb(movieDB, "База данных", "PostgreSQL", "Медиатека, метаданные, S3 связи")
+    Container(kafka, "Kafka queue")
+    Container(paymentService, "Платёжная система", "Go")
+}
+
+System_Ext(recomendations, "Сервис рекомендаций")
+System_Ext(s3, "Хранилище фильмотеки", "S3")
+System_Ext(thirdPartyMovieSource, "Сторонняя медиатека")
+System_Ext(paymentSystem, "Платёжная система")
+System_Ext(cdn, "CDN")
+
+' внешние сущности
+' потоки
+Rel(customer, apiGateway, "request")
+Rel(admin, apiGateway, "request")
+Rel(movieService, s3, "binary data")
+Rel(movieService, cdn, "request")
+
+Rel(customerProfileService, customerDB, "data")
+Rel(movieService, movieDB, "meta")
+
+Rel(apiGateway, paymentService, "payment")
+Rel(apiGateway, customerProfileService, "data")
+Rel(apiGateway, movieService, "data")
+
+Rel(paymentService, kafka, "topic: payment")
+Rel(movieService, kafka, "topic: recomendations")
+Rel(movieService, kafka, "topic: customeMediaStore")
+
+
+Rel(kafka, paymentSystem, "payment")
+Rel(kafka, recomendations, "data")
+Rel(kafka, thirdPartyMovieSource, "request")
+
+Rel(paymentSystem, apiGateway, "success/fail")
+
+Rel(cdn, s3, "request")
+
+@enduml
